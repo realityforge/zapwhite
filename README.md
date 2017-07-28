@@ -15,4 +15,6 @@ patterns supplied either in the command line or in the `.gitattributes`
 file associated with the repository.
 
 The tool will ensure files annotated with `text` will be processed and
-files with the `crlf` flag as true will be treated as dos files.
+files with the `crlf` flag as true will be treated as dos files. If the
+file has an `encoding` attribute, the tool will not try to convert to
+UTF-8.
