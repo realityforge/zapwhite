@@ -1,0 +1,9 @@
+*.iml
+/*.ipr
+/*.iws
+/.rakeTasks
+/Gemfile.lock
+/patch.diff
+/pkg
+/rdoc
+/tmp
