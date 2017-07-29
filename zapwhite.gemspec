@@ -9,8 +9,8 @@ Gem::Specification.new do |s|
   s.email              = %q{peter@realityforge.org}
 
   s.homepage           = %q{https://github.com/realityforge/zapwhite}
-  s.summary            = %q{A simple tool to normalize whitespace.}
-  s.description        = %q{A simple tool to normalize whitespace.}
+  s.summary            = %q{A simple tool to normalize whitespace in git repositories.}
+  s.description        = %q{A simple tool to normalize whitespace in git repositories.}
 
   s.files              = `git ls-files`.split("\n")
   s.test_files         = `git ls-files -- {spec}/*`.split("\n")
