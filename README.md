@@ -18,4 +18,5 @@ The tool will ensure files annotated with `text` will be processed and
 files with the `crlf` flag as true will be treated as dos files. If the
 file has an `encoding` attribute, the tool will not try to convert to
 UTF-8. The tool will also scan and remove duplicate new lines if any file
-has a gitattribute `nodupnl`
+has a attribute `-dupnl`. The tool will not enforce end of file new
+lines if attribute `-eofnl` is set.
