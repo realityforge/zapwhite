@@ -1,0 +1,42 @@
+#!/usr/bin/env ruby
+
+require 'rubygems'
+require 'bundler/setup'
+
+require 'optparse'
+require 'reality/zapwhite'
+
+@check_only = false
+@exclude_patterns = []
+@base_directory = Dir.pwd
+OptionParser.new do |opts|
+  opts.banner = 'Usage: zapwhite [options] directory'
+
+  opts.on('-c', '--check-only', 'Run check and emit messages but do not change files') do
+    @check_only = true
+  end
+
+  opts.on('-d', '--directory DIR', 'Base directory of git repository') do |base_directory|
+    @base_directory = base_directory
+  end
+
+  opts.on('-e', '--exclude-pattern PATTERN', 'Replace default exclude patterns with pattern(s) specified.') do |pattern|
+    @exclude_patterns << pattern
+  end
+end.parse!
+
+unless ARGV.empty?
+  puts "Unhandled options: #{ARGV.inspect}"
+  exit -1
+end
+
+runner = Reality::Zapwhite.new(File.expand_path(@base_directory))
+runner.check_only = @check_only
+unless @exclude_patterns.empty?
+  runner.exclude_patterns.clear
+  @exclude_patterns.each do |exclude_pattern|
+    runner.exclude_patterns << exclude_pattern
+  end
+end
+
+exit runner.run
