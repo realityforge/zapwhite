@@ -19,7 +19,7 @@ module Reality
 
     def initialize(base_directory)
       @base_directory = base_directory
-      @attributes = Reality::GitAttributes.new(@base_directory)
+      @attributes = Reality::Git::Attributes.parse(@base_directory)
       @exclude_patterns = %w(vendor/.* node_modules/.*)
       @check_only = false
     end

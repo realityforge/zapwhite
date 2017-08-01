@@ -21,7 +21,7 @@ Gem::Specification.new do |s|
   s.has_rdoc           = false
   s.rdoc_options       = %w(--line-numbers --inline-source --title gitattributes)
 
-  s.add_dependency 'gitattributes', '= 1.1.0'
+  s.add_dependency 'gitattributes', '= 2.0.0'
 
   s.add_development_dependency(%q<minitest>, ['= 5.9.1'])
   s.add_development_dependency(%q<test-unit>, ['= 3.1.5'])
