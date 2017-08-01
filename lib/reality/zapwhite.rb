@@ -85,7 +85,7 @@ module Reality
             attr = @attributes.attributes(f)
             if attr['text']
               files[f] = {
-                :dos => (!!attr['crlf']),
+                :dos => (attr['eol'] == 'crlf'),
                 :encoding => attr['encoding'],
                 :nodupnl => attr['dupnl'].nil? ? false : !attr['dupnl'],
                 :eofnl => attr['eofnl'].nil? ? true : !!attr['eofnl']
