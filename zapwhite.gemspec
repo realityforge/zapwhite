@@ -19,7 +19,7 @@ Gem::Specification.new do |s|
   s.require_paths      = %w(lib)
 
   s.has_rdoc           = false
-  s.rdoc_options       = %w(--line-numbers --inline-source --title gitattributes)
+  s.rdoc_options       = %w(--line-numbers --inline-source --title zapwhite)
 
   s.add_dependency 'gitattributes', '= 2.0.0'
 
