@@ -31,7 +31,7 @@ TEXT
   def test_fixing_trailing_whitespace_not_crlf_specified
     dir = create_git_repo do
       write_gitattributes_file(<<TEXT)
-*.md text -crlf
+*.md text eol=lf
 TEXT
       write_file('README.md', "Hello \n")
     end
@@ -59,7 +59,7 @@ TEXT
   def test_dos_eol
     dir = create_git_repo do
       write_gitattributes_file(<<TEXT)
-*.bat text crlf
+*.bat text eol=crlf
 TEXT
       write_file('run.bat', "echo hi\n")
     end

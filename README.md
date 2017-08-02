@@ -6,7 +6,7 @@ A simple tool to normalize whitespace in git repositories. The tool:
 
 * removes trailing whitespace from each line
 * ensures files end with a new line
-* ensure files are in UTF-8 format with no invalid UTF sequences
+* ensure files are in ASCII format with no invalid UTF sequences
 * ensures dos files use dos line endings and all other files do not.
 
 Files that are part of the repository are candidates for normalization.
@@ -15,8 +15,8 @@ patterns supplied either in the command line or in the `.gitattributes`
 file associated with the repository.
 
 The tool will ensure files annotated with `text` will be processed and
-files with the `crlf` flag as true will be treated as dos files. If the
+files with the `eol=crlf` attribute will be treated as dos files. If the
 file has an `encoding` attribute, the tool will not try to convert to
-UTF-8. The tool will also scan and remove duplicate new lines if any file
+ASCII. The tool will also scan and remove duplicate new lines if any file
 has a attribute `-dupnl`. The tool will not enforce end of file new
 lines if attribute `-eofnl` is set.
