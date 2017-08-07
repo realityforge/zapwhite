@@ -28,6 +28,20 @@ TEXT
     end
   end
 
+  def test_fixing_trailing_whitespace_where_rule_has_whitespace_pattern
+    dir = create_git_repo do
+      write_gitattributes_file(<<TEXT)
+Read[[:space:]]Me.txt text
+TEXT
+      write_file('Read Me.txt', "Hello \n")
+    end
+    in_dir(dir) do
+      output = run_command("#{ZAPWHITE_BIN}", 1)
+      assert_equal "Fixing: Read Me.txt\n", output
+      assert_equal "Hello\n", IO.binread("#{dir}/Read Me.txt")
+    end
+  end
+
   def test_fixing_trailing_whitespace_not_crlf_specified
     dir = create_git_repo do
       write_gitattributes_file(<<TEXT)
