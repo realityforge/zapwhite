@@ -40,7 +40,7 @@ module Reality
       normalize_count = 0
       files = {}
 
-      collect_files(files)
+      collect_file_attributes(files)
 
       files.each_pair do |filename, config|
         full_filename = "#{@base_directory}/#{filename}"
@@ -75,7 +75,7 @@ module Reality
 
     private
 
-    def collect_files(files)
+    def collect_file_attributes(files)
       exclude_patterns = self.exclude_patterns.collect {|s| /^#{s}$/}
 
       in_dir(@base_directory) do
