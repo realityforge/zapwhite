@@ -76,22 +76,28 @@ module Reality
     private
 
     def collect_file_attributes(files)
+      each_git_filename do |f|
+        full_filename = "#{@base_directory}/#{f}"
+        if File.exist?(full_filename)
+          attr = @attributes.attributes(f)
+          if attr['text']
+            files[f] = {
+              :dos => (attr['eol'] == 'crlf'),
+              :encoding => attr['encoding'],
+              :nodupnl => attr['dupnl'].nil? ? false : !attr['dupnl'],
+              :eofnl => attr['eofnl'].nil? ? true : !!attr['eofnl']
+            }
+          end
+        end
+      end
+    end
+
+    def each_git_filename
       exclude_patterns = self.exclude_patterns.collect {|s| /^#{s}$/}
 
       in_dir(@base_directory) do
         `git ls-files`.split("\n").each do |f|
-          full_filename = "#{@base_directory}/#{f}"
-          if !exclude_patterns.any? {|p| p =~ f} && File.exist?(full_filename)
-            attr = @attributes.attributes(f)
-            if attr['text']
-              files[f] = {
-                :dos => (attr['eol'] == 'crlf'),
-                :encoding => attr['encoding'],
-                :nodupnl => attr['dupnl'].nil? ? false : !attr['dupnl'],
-                :eofnl => attr['eofnl'].nil? ? true : !!attr['eofnl']
-              }
-            end
-          end
+          yield f unless exclude_patterns.any? {|p| p =~ f}
         end
       end
     end
