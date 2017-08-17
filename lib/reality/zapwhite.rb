@@ -202,6 +202,8 @@ module Reality
       attributes.text_rule('.gitignore')
       attributes.text_rule('.gitattributes')
 
+      attributes.text_rule('.node-version')
+
       # Ruby defaults
       attributes.text_rule('Gemfile')
       attributes.text_rule('*.gemspec')
@@ -209,6 +211,9 @@ module Reality
       attributes.text_rule('*.rb')
       attributes.text_rule('*.yaml')
       attributes.text_rule('*.yml')
+
+      attributes.text_rule('*.haml')
+      attributes.text_rule('*.rhtml')
 
       # Documentation defaults
       attributes.text_rule('*.txt')
@@ -260,6 +265,7 @@ module Reality
       attributes.text_rule('*.jsp')
       attributes.text_rule('*.properties')
       attributes.rule('*.jar', :binary => true)
+      attributes.text_rule('Vagrantfile')
       attributes.text_rule('Dockerfile')
       attributes.text_rule('LICENSE')
       attributes.text_rule('CHANGELOG')
@@ -273,6 +279,10 @@ module Reality
       attributes.text_rule('*.c')
       attributes.binary_rule('*.dll')
       attributes.binary_rule('*.so')
+
+      # IDE files
+      attributes.text_rule('*.iml')
+      attributes.text_rule('*.ipr')
 
       attributes
     end
