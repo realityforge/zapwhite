@@ -82,7 +82,7 @@ module Reality
 
       in_dir(directory) do
         run_command('git init')
-        run_command("git config --local commit.gpgsign false")
+        run_command('git config --local commit.gpgsign false')
         run_command("git config --local user.name \"Your Name\"")
         run_command("git config --local user.email \"you@example.com\"")
         yield
