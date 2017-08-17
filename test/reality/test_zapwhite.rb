@@ -9,7 +9,7 @@ TEXT
       write_file('README.md', "Hello\n")
     end
     in_dir(dir) do
-      output = run_command("#{ZAPWHITE_BIN}", 0)
+      output = run_command("#{ZAPWHITE_BIN} --no-generate-gitattributes", 0)
       assert_equal '', output
     end
   end
@@ -22,7 +22,7 @@ TEXT
       write_file('README.md', "Hello \n")
     end
     in_dir(dir) do
-      output = run_command("#{ZAPWHITE_BIN}", 1)
+      output = run_command("#{ZAPWHITE_BIN} --no-generate-gitattributes", 1)
       assert_equal "Fixing: README.md\n", output
       assert_equal "Hello\n", IO.binread("#{dir}/README.md")
     end
@@ -36,7 +36,7 @@ TEXT
       write_file('Read Me.txt', "Hello \n")
     end
     in_dir(dir) do
-      output = run_command("#{ZAPWHITE_BIN}", 1)
+      output = run_command("#{ZAPWHITE_BIN} --no-generate-gitattributes", 1)
       assert_equal "Fixing: Read Me.txt\n", output
       assert_equal "Hello\n", IO.binread("#{dir}/Read Me.txt")
     end
@@ -50,7 +50,7 @@ TEXT
       write_file('README.md', "Hello \n")
     end
     in_dir(dir) do
-      output = run_command("#{ZAPWHITE_BIN}", 1)
+      output = run_command("#{ZAPWHITE_BIN} --no-generate-gitattributes", 1)
       assert_equal "Fixing: README.md\n", output
       assert_equal "Hello\n", IO.binread("#{dir}/README.md")
     end
@@ -64,7 +64,7 @@ TEXT
       write_file('README.md', 'Hello')
     end
     in_dir(dir) do
-      output = run_command("#{ZAPWHITE_BIN}", 1)
+      output = run_command("#{ZAPWHITE_BIN} --no-generate-gitattributes", 1)
       assert_equal "Fixing: README.md\n", output
       assert_equal "Hello\n", IO.binread("#{dir}/README.md")
     end
@@ -78,7 +78,7 @@ TEXT
       write_file('run.bat', "echo hi\n")
     end
     in_dir(dir) do
-      output = run_command("#{ZAPWHITE_BIN}", 1)
+      output = run_command("#{ZAPWHITE_BIN} --no-generate-gitattributes", 1)
       assert_equal "Fixing: run.bat\n", output
       assert_equal "echo hi\r\n", IO.binread("#{dir}/run.bat")
     end
@@ -92,7 +92,7 @@ TEXT
       write_file('README.md', "Hello\n\n\n\n\nHow are you?\n")
     end
     in_dir(dir) do
-      output = run_command("#{ZAPWHITE_BIN}", 1)
+      output = run_command("#{ZAPWHITE_BIN} --no-generate-gitattributes", 1)
       assert_equal "Fixing: README.md\n", output
       assert_equal "Hello\n\nHow are you?\n", IO.binread("#{dir}/README.md")
     end
@@ -106,7 +106,7 @@ TEXT
       write_file('README.md', "Hello\n\n\n\nHow are you?\n")
     end
     in_dir(dir) do
-      output = run_command("#{ZAPWHITE_BIN}", 0)
+      output = run_command("#{ZAPWHITE_BIN} --no-generate-gitattributes", 0)
       assert_equal '', output
       assert_equal "Hello\n\n\n\nHow are you?\n", IO.binread("#{dir}/README.md")
     end
@@ -120,7 +120,7 @@ TEXT
       write_file('README.md', 'Hello')
     end
     in_dir(dir) do
-      output = run_command("#{ZAPWHITE_BIN}", 0)
+      output = run_command("#{ZAPWHITE_BIN} --no-generate-gitattributes", 0)
       assert_equal '', output
       assert_equal 'Hello', IO.binread("#{dir}/README.md")
     end
