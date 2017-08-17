@@ -9,6 +9,7 @@ require 'reality/zapwhite'
 @check_only = false
 @generate_gitattributes = true
 @exclude_patterns = []
+@rules = []
 @base_directory = Dir.pwd
 OptionParser.new do |opts|
   opts.banner = 'Usage: zapwhite [options] directory'
@@ -28,6 +29,10 @@ OptionParser.new do |opts|
   opts.on('-e', '--exclude-pattern PATTERN', 'Replace default exclude patterns with pattern(s) specified.') do |pattern|
     @exclude_patterns << pattern
   end
+
+  opts.on('-r', '--rule RULE', 'Additional rule(s) (a.k.a. lines) to add when generating .gitattributes file.') do |rule|
+    @rules << rule
+  end
 end.parse!
 
 unless ARGV.empty?
@@ -38,6 +43,7 @@ end
 runner = Reality::Zapwhite.new(File.expand_path(@base_directory))
 runner.check_only = @check_only
 runner.generate_gitattributes = @generate_gitattributes
+runner.additional_gitattribute_rules = @rules
 unless @exclude_patterns.empty?
   runner.exclude_patterns.clear
   @exclude_patterns.each do |exclude_pattern|

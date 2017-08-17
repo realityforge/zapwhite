@@ -22,11 +22,14 @@ module Reality
       @attributes = Reality::Git::Attributes.parse(@base_directory)
       @exclude_patterns = %w(vendor/.* node_modules/.*)
       @check_only = false
+      @additional_gitattribute_rules = []
     end
 
     def exclude_patterns
       @exclude_patterns
     end
+
+    attr_accessor :additional_gitattribute_rules
 
     attr_writer :generate_gitattributes
 
@@ -108,6 +111,10 @@ module Reality
           attributes.rule(rule.pattern, rule.attributes.merge(:priority => rule.priority))
           template.remove_rule(rule)
         end
+      end
+      self.additional_gitattribute_rules.each do |line|
+        rule = Reality::Git::AttributeRule.parse_line(line)
+        attributes.rule(rule.pattern, rule.attributes.merge(:priority => 2))
       end
       attributes
     end
