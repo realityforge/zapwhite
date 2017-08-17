@@ -20,8 +20,3 @@ file has an `encoding` attribute, the tool will not try to convert to
 ASCII. The tool will also scan and remove duplicate new lines if any file
 has a attribute `-dupnl`. The tool will not enforce end of file new
 lines if attribute `-eofnl` is set.
-
-## TODO
-
-* Next version should generate `.gitattributes` based on scanning project
-  and then follow up with normal zapwhite process.
