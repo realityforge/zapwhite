@@ -125,4 +125,33 @@ TEXT
       assert_equal 'Hello', IO.binread("#{dir}/README.md")
     end
   end
+
+  def test_generate_gitattributes
+    dir = create_git_repo do
+      write_file('README.md', "Hello\n")
+    end
+    in_dir(dir) do
+      output = run_command("#{ZAPWHITE_BIN} --generate-gitattributes", 1)
+      assert_equal "Fixing: .gitattributes\n", output
+      assert_equal "Hello\n", IO.binread("#{dir}/README.md")
+      assert_equal "# DO NOT EDIT: File is auto-generated\n* -text\n*.md text\n", IO.binread("#{dir}/.gitattributes")
+    end
+  end
+
+  def test_generate_gitattributes_matches
+    dir = create_git_repo do
+      write_gitattributes_file(<<TEXT)
+# DO NOT EDIT: File is auto-generated
+* -text
+*.md text
+TEXT
+      write_file('README.md', "Hello\n")
+    end
+    in_dir(dir) do
+      output = run_command("#{ZAPWHITE_BIN} --generate-gitattributes", 0)
+      assert_equal '', output
+      assert_equal "Hello\n", IO.binread("#{dir}/README.md")
+      assert_equal "# DO NOT EDIT: File is auto-generated\n* -text\n*.md text\n", IO.binread("#{dir}/.gitattributes")
+    end
+  end
 end

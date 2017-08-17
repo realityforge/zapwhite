@@ -28,6 +28,12 @@ module Reality
       @exclude_patterns
     end
 
+    attr_writer :generate_gitattributes
+
+    def generate_gitattributes?
+      @generate_gitattributes
+    end
+
     def check_only?
       !!@check_only
     end
@@ -38,6 +44,24 @@ module Reality
     # Return the number of files that need normalization
     def run
       normalize_count = 0
+
+      if generate_gitattributes?
+        output_options = {:prefix => '# DO NOT EDIT: File is auto-generated', :normalize => true}
+        new_gitattributes = generate_gitattributes!
+        new_content = new_gitattributes.as_file_contents(output_options)
+        old_content = File.exist?(@attributes.attributes_file) ? IO.read(@attributes.attributes_file) : nil
+        if new_content != old_content
+          @attributes = new_gitattributes
+          if check_only?
+            puts 'Non-normalized .gitattributes file'
+          else
+            puts 'Fixing: .gitattributes'
+            @attributes.write(output_options)
+          end
+          normalize_count += 1
+        end
+      end
+
       files = {}
 
       collect_file_attributes(files)
@@ -74,6 +98,19 @@ module Reality
     end
 
     private
+
+    def generate_gitattributes!
+      attributes = Reality::Git::Attributes.new(@base_directory)
+      template = create_template_gitattributes
+      each_git_filename do |f|
+        full_filename = "#{@base_directory}/#{f}"
+        template.rules_for_path(full_filename).each do |rule|
+          attributes.rule(rule.pattern, rule.attributes.merge(:priority => rule.priority))
+          template.remove_rule(rule)
+        end
+      end
+      attributes
+    end
 
     def collect_file_attributes(files)
       each_git_filename do |f|
@@ -145,6 +182,93 @@ module Reality
       ensure
         Dir.chdir(original_dir)
       end
+    end
+
+    def create_template_gitattributes
+      attributes = Reality::Git::Attributes.new(@base_directory)
+      attributes.rule('*', :text => false)
+
+      attributes.dos_text_rule('*.rdl', :eofnl => false)
+      attributes.unix_text_rule('*.sh')
+      attributes.text_rule('*.md')
+      attributes.binary_rule('*.jpg')
+
+      attributes.text_rule('.gitignore')
+      attributes.text_rule('.gitattributes')
+
+      # Ruby defaults
+      attributes.text_rule('Gemfile')
+      attributes.text_rule('*.gemspec')
+      attributes.text_rule('.ruby-version')
+      attributes.text_rule('*.rb')
+      attributes.text_rule('*.yaml')
+      attributes.text_rule('*.yml')
+
+      # Documentation defaults
+      attributes.text_rule('*.txt')
+      attributes.text_rule('*.md')
+      attributes.text_rule('*.textile')
+      attributes.text_rule('*.rdoc')
+      attributes.text_rule('*.html')
+      attributes.text_rule('*.xhtml')
+      attributes.text_rule('*.css', :encoding => 'UTF8')
+      attributes.text_rule('*.js')
+      attributes.binary_rule('*.jpg')
+      attributes.binary_rule('*.jpeg')
+      attributes.binary_rule('*.png')
+      attributes.binary_rule('*.bmp')
+      attributes.binary_rule('*.ico')
+
+      attributes.binary_rule('*.pdf')
+      attributes.binary_rule('*.doc')
+
+      # Common file formats
+      attributes.text_rule('*.json')
+      attributes.text_rule('*.xml')
+      attributes.text_rule('*.xsd')
+      attributes.text_rule('*.xsl')
+      attributes.text_rule('*.wsdl')
+
+      # Build system defaults
+      attributes.text_rule('buildfile')
+      attributes.text_rule('Buildfile')
+      attributes.text_rule('Rakefile')
+      attributes.text_rule('rakefile')
+      attributes.text_rule('*.rake')
+
+      attributes.text_rule('*.graphql')
+      attributes.text_rule('*.graphqls')
+      attributes.text_rule('*.ts')
+      attributes.text_rule('*.tsx')
+      attributes.text_rule('*.ts')
+      attributes.text_rule('*.tsx')
+      attributes.text_rule('Jenkinsfile')
+      attributes.text_rule('*.groovy')
+      attributes.dos_text_rule('*.rdl', :eofnl => false)
+      attributes.text_rule('*.erb')
+      attributes.text_rule('*.sass')
+      attributes.text_rule('*.scss')
+      attributes.text_rule('*.less')
+      attributes.text_rule('*.sql')
+      attributes.text_rule('*.java')
+      attributes.text_rule('*.jsp')
+      attributes.text_rule('*.properties')
+      attributes.rule('*.jar', :binary => true)
+      attributes.text_rule('Dockerfile')
+      attributes.text_rule('LICENSE')
+      attributes.text_rule('CHANGELOG')
+
+      # Shell scripts
+      attributes.dos_text_rule('*.cmd')
+      attributes.dos_text_rule('*.bat')
+      attributes.text_rule('*.sh')
+
+      # Native development files
+      attributes.text_rule('*.c')
+      attributes.binary_rule('*.dll')
+      attributes.binary_rule('*.so')
+
+      attributes
     end
   end
 end

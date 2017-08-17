@@ -7,6 +7,7 @@ require 'optparse'
 require 'reality/zapwhite'
 
 @check_only = false
+@generate_gitattributes = false
 @exclude_patterns = []
 @base_directory = Dir.pwd
 OptionParser.new do |opts|
@@ -14,6 +15,10 @@ OptionParser.new do |opts|
 
   opts.on('-c', '--check-only', 'Run check and emit messages but do not change files') do
     @check_only = true
+  end
+
+  opts.on('-g', '--generate-gitattributes', 'Generate the .gitattributes file based on files present on filesystem') do
+    @generate_gitattributes = true
   end
 
   opts.on('-d', '--directory DIR', 'Base directory of git repository') do |base_directory|
@@ -32,6 +37,7 @@ end
 
 runner = Reality::Zapwhite.new(File.expand_path(@base_directory))
 runner.check_only = @check_only
+runner.generate_gitattributes = @generate_gitattributes
 unless @exclude_patterns.empty?
   runner.exclude_patterns.clear
   @exclude_patterns.each do |exclude_pattern|
