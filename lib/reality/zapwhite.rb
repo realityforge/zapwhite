@@ -198,7 +198,6 @@ module Reality
       attributes.dos_text_rule('*.rdl', :eofnl => false)
       attributes.unix_text_rule('*.sh')
       attributes.text_rule('*.md')
-      attributes.binary_rule('*.jpg')
 
       attributes.text_rule('.gitignore')
       attributes.text_rule('.gitattributes')
