@@ -199,4 +199,71 @@ Fixing: .gitattributes
 OUTPUT
     end
   end
+
+  def test_braids_are_added_to_excludes
+    dir = create_git_repo do
+      write_file('README.md', "Hello\n")
+      write_file('.braids.json',<<BRAIDS_JSON)
+{
+  "vendor/docs/way_of_stock": {
+    "url": "https://github.com/stocksoftware/way_of_stock.git",
+    "branch": "master",
+    "revision": "0405926c5b4229e7d1f605a65603df64b5667f2d"
+  },
+  "vendor/tools/buildr_plus": {
+    "url": "https://github.com/realityforge/buildr_plus.git",
+    "branch": "master",
+    "revision": "4a4a0666871861de1ddc7581a02d6d656702fa6b"
+  },
+  "vendor/tools/dbt": {
+    "branch": "master",
+    "revision": "554139d3ea275bd54949b9504090c77e4d39ba65",
+    "url": "https://github.com/realityforge/dbt.git"
+  },
+  "vendor/tools/domgen": {
+    "branch": "master",
+    "revision": "1da8f5d43f9c84ac234c6354af8717bcfde03f88",
+    "url": "https://github.com/realityforge/domgen.git"
+  },
+  "vendor/tools/kinjen": {
+    "url": "https://github.com/realityforge/kinjen.git",
+    "branch": "master",
+    "revision": "34a962de77918bc1a76f1fcf8c92fe6721d5b524"
+  },
+  "vendor/tools/redfish": {
+    "url": "https://github.com/realityforge/redfish.git",
+    "branch": "master",
+    "revision": "5e6bb18009e682c09631e1234c955373735d27ab"
+  },
+  "vendor/tools/resgen": {
+    "url": "https://github.com/realityforge/resgen.git",
+    "branch": "master",
+    "revision": "631a5aa371d3c6f2a68c95e5da3ca8e16a6ee0c7"
+  }
+}
+BRAIDS_JSON
+    end
+    in_dir(dir) do
+      output = run_command("#{ZAPWHITE_BIN} --generate-gitattributes --rule '*.bin -diff' --rule '*.rxt text' --verbose", 1)
+      assert_equal <<OUTPUT, output
+Base Directory: #{dir}
+Check for violations or fix violations: fix
+Generate .gitattributes file?: true
+Additional .gitattribute rules:
+ * *.bin -diff
+ * *.rxt text
+Exclude patterns:
+ * vendor/.*
+ * node_modules/.*
+ * vendor/docs/way_of_stock
+ * vendor/tools/buildr_plus
+ * vendor/tools/dbt
+ * vendor/tools/domgen
+ * vendor/tools/kinjen
+ * vendor/tools/redfish
+ * vendor/tools/resgen
+Fixing: .gitattributes
+OUTPUT
+    end
+  end
 end

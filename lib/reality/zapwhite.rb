@@ -13,6 +13,7 @@
 #
 
 require 'reality/gitattributes'
+require 'json'
 
 module Reality
   class Zapwhite
@@ -20,7 +21,7 @@ module Reality
     def initialize(base_directory)
       @base_directory = base_directory
       @attributes = Reality::Git::Attributes.parse(@base_directory)
-      @exclude_patterns = %w(vendor/.* node_modules/.*)
+      @exclude_patterns = %w(vendor/.* node_modules/.*) + load_braid_mirrors
       @check_only = false
       @additional_gitattribute_rules = []
     end
@@ -101,6 +102,11 @@ module Reality
     end
 
     private
+
+    def load_braid_mirrors
+      braid_file = "#{@base_directory}/.braids.json"
+      File.exist?(braid_file) ? JSON.parse(IO.read(braid_file)).keys : []
+    end
 
     def generate_gitattributes!
       attributes = Reality::Git::Attributes.new(@base_directory)
