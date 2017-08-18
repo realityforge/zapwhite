@@ -6,6 +6,7 @@ require 'bundler/setup'
 require 'optparse'
 require 'reality/zapwhite'
 
+@verbose = false
 @check_only = false
 @generate_gitattributes = true
 @exclude_patterns = []
@@ -33,6 +34,10 @@ OptionParser.new do |opts|
   opts.on('-r', '--rule RULE', 'Additional rule(s) (a.k.a. lines) to add when generating .gitattributes file.') do |rule|
     @rules << rule
   end
+
+  opts.on('-v', '--verbose', 'Print additional information during operation.') do
+    @verbose = true
+  end
 end.parse!
 
 unless ARGV.empty?
@@ -48,6 +53,24 @@ unless @exclude_patterns.empty?
   runner.exclude_patterns.clear
   @exclude_patterns.each do |exclude_pattern|
     runner.exclude_patterns << exclude_pattern
+  end
+end
+
+if @verbose
+  puts "Base Directory: #{@base_directory}"
+  puts "Check for violations or fix violations: #{runner.check_only? ? 'check' : 'fix'}"
+  puts "Generate .gitattributes file?: #{runner.generate_gitattributes?}"
+  unless runner.additional_gitattribute_rules.empty?
+    puts 'Additional .gitattribute rules:'
+    runner.additional_gitattribute_rules.each do |rule|
+      puts " * #{rule}"
+    end
+  end
+  unless runner.exclude_patterns.empty?
+    puts 'Exclude patterns:'
+    runner.exclude_patterns.each do |pattern|
+      puts " * #{pattern}"
+    end
   end
 end
 

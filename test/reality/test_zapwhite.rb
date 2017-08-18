@@ -179,5 +179,24 @@ TEXT
     end
   end
 
-
+  def test_verbose_mode
+    dir = create_git_repo do
+      write_file('README.md', "Hello\n")
+    end
+    in_dir(dir) do
+      output = run_command("#{ZAPWHITE_BIN} --generate-gitattributes --rule '*.bin -diff' --rule '*.rxt text' --verbose", 1)
+      assert_equal <<OUTPUT, output
+Base Directory: #{dir}
+Check for violations or fix violations: fix
+Generate .gitattributes file?: true
+Additional .gitattribute rules:
+ * *.bin -diff
+ * *.rxt text
+Exclude patterns:
+ * vendor/.*
+ * node_modules/.*
+Fixing: .gitattributes
+OUTPUT
+    end
+  end
 end
