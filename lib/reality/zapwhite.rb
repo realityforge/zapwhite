@@ -221,7 +221,7 @@ module Reality
       attributes.text_rule('*.rdoc')
       attributes.text_rule('*.html')
       attributes.text_rule('*.xhtml')
-      attributes.text_rule('*.css', :encoding => 'UTF8')
+      attributes.text_rule('*.css')
       attributes.text_rule('*.js')
       attributes.binary_rule('*.jpg')
       attributes.binary_rule('*.jpeg')
