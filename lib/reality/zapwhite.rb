@@ -72,10 +72,12 @@ module Reality
 
       files.each_pair do |filename, config|
         full_filename = "#{@base_directory}/#{filename}"
-        content = File.read(full_filename)
+        original_bin_content = File.binread(full_filename)
 
-        content = patch_encoding(content) unless config[:encoding]
-        original_content = content.dup
+        encoding = config[:encoding].nil? ? 'utf-8' : config[:encoding].gsub(/^UTF/,'utf-')
+
+        content = File.read(full_filename, :encoding => "bom|#{encoding}")
+
         content =
           config[:dos] ?
             clean_dos_whitespace(filename, content, config[:eofnl]) :
@@ -85,7 +87,7 @@ module Reality
             # Keep removing duplicate new lines till they have gone
           end
         end
-        if content != original_content
+        if content.bytes != original_bin_content.bytes
           normalize_count += 1
           if check_only?
             puts "Non-normalized whitespace in #{filename}"
@@ -174,15 +176,6 @@ module Reality
       rescue
         puts "Skipping dos whitespace cleanup: #{filename}"
       end
-      content
-    end
-
-    def patch_encoding(content)
-      content =
-        content.respond_to?(:encode!) ?
-          content.encode!('UTF-8', 'binary', :invalid => :replace, :undef => :replace, :replace => '') :
-          content
-      content.gsub!(/^\xEF\xBB\xBF/, '')
       content
     end
 

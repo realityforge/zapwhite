@@ -266,4 +266,46 @@ Fixing: .gitattributes
 OUTPUT
     end
   end
+
+  def test_file_with_bom
+    dir = create_git_repo do
+      write_gitattributes_file(<<TEXT)
+*.tsql text
+TEXT
+      write_file('test.tsql', IO.binread(File.expand_path(BASE_DIR + '/test/fixtures/file_with_bom.tsql')))
+    end
+    in_dir(dir) do
+      output = run_command("#{ZAPWHITE_BIN} --no-generate-gitattributes", 1)
+      assert_equal "Fixing: test.tsql\n", output
+      assert_equal "CREATE TYPE [dbo].[Boolean__Yes_No_] FROM [tinyint] NOT NULL\n", IO.binread("#{dir}/test.tsql")
+    end
+  end
+
+  def test_file_with_utf8_encoding
+    dir = create_git_repo do
+      write_gitattributes_file(<<TEXT)
+*.tcss text
+TEXT
+      write_file('test.tcss', IO.binread(File.expand_path(BASE_DIR + '/test/fixtures/utf8.tcss')))
+    end
+    in_dir(dir) do
+      output = run_command("#{ZAPWHITE_BIN} --no-generate-gitattributes", 0)
+      assert_equal '', output
+      assert_equal IO.binread(File.expand_path(BASE_DIR + '/test/fixtures/utf8.tcss')), IO.binread("#{dir}/test.tcss")
+    end
+  end
+
+  def test_file_with_bom_encoding_set
+    dir = create_git_repo do
+      write_gitattributes_file(<<TEXT)
+*.tsql text encoding=utf-8
+TEXT
+      write_file('test.tsql', IO.binread(File.expand_path(BASE_DIR + '/test/fixtures/file_with_bom.tsql')))
+    end
+    in_dir(dir) do
+      output = run_command("#{ZAPWHITE_BIN} --no-generate-gitattributes", 1)
+      assert_equal "Fixing: test.tsql\n", output
+      assert_equal "CREATE TYPE [dbo].[Boolean__Yes_No_] FROM [tinyint] NOT NULL\n", IO.binread("#{dir}/test.tsql")
+    end
+  end
 end
