@@ -274,6 +274,11 @@ module Reality
       attributes.dos_text_rule('*.bat')
       attributes.text_rule('*.sh')
 
+      # WASM development files
+      attributes.text_rule('*.wast')
+      attributes.text_rule('*.wat')
+      attributes.binary_rule('*.wasm')
+
       # Native development files
       attributes.text_rule('*.c')
       attributes.binary_rule('*.dll')
