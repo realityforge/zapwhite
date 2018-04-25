@@ -280,6 +280,9 @@ module Reality
       attributes.text_rule('*.wat')
       attributes.binary_rule('*.wasm')
 
+      # Rust defaults
+      attributes.text_rule('*.rs')
+
       # Native development files
       attributes.text_rule('*.c')
       attributes.binary_rule('*.dll')
