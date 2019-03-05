@@ -203,6 +203,11 @@ module Reality
 
       attributes.text_rule('.node-version')
 
+      # Bazel defaults
+      attributes.text_rule('.bazelrc')
+      attributes.text_rule('BUILD')
+      attributes.text_rule('*.bzl')
+
       # Ruby defaults
       attributes.text_rule('Gemfile')
       attributes.text_rule('*.gemspec')
