@@ -207,6 +207,7 @@ module Reality
       attributes.text_rule('.bazelrc')
       attributes.text_rule('WORKSPACE')
       attributes.text_rule('BUILD')
+      attributes.text_rule('BUILD.bazel')
       attributes.text_rule('*.bzl')
 
       # Ruby defaults
