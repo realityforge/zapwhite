@@ -150,6 +150,18 @@ TEXT
     end
   end
 
+  def test_allow_empty
+    dir = create_git_repo do
+      write_file('BUILD', "\n")
+    end
+    in_dir(dir) do
+      output = run_command("#{ZAPWHITE_BIN}", 2)
+      assert_equal "Fixing: .gitattributes\nFixing: BUILD\n", output
+      assert_equal "", IO.binread("#{dir}/BUILD")
+      assert_equal "# DO NOT EDIT: File is auto-generated\n* -text\nBUILD text allow_empty\n", IO.binread("#{dir}/.gitattributes")
+    end
+  end
+
   def test_generate_gitattributes_matches
     dir = create_git_repo do
       write_gitattributes_file(<<TEXT)

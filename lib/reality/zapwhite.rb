@@ -80,8 +80,8 @@ module Reality
 
         content =
           config[:dos] ?
-            clean_dos_whitespace(filename, content, config[:eofnl]) :
-            clean_whitespace(filename, content, config[:eofnl])
+            clean_dos_whitespace(filename, content, config[:eofnl], config[:allow_empty]) :
+            clean_whitespace(filename, content, config[:eofnl], config[:allow_empty])
         if config[:nodupnl]
           while content.gsub!(/\n\n\n/, "\n\n")
             # Keep removing duplicate new lines till they have gone
@@ -136,6 +136,7 @@ module Reality
             files[f] = {
               :dos => (attr['eol'] == 'crlf'),
               :encoding => attr['encoding'],
+              :allow_empty => attr['allow_empty'].nil? ? false : !!attr['allow_empty'],
               :nodupnl => attr['dupnl'].nil? ? false : !attr['dupnl'],
               :eofnl => attr['eofnl'].nil? ? true : !!attr['eofnl']
             }
@@ -154,7 +155,7 @@ module Reality
       end
     end
 
-    def clean_whitespace(filename, content, eofnl)
+    def clean_whitespace(filename, content, eofnl, allow_empty)
       begin
         content.gsub!(/\r\n/, "\n")
         content.gsub!(/[ \t]+\n/, "\n")
@@ -163,10 +164,11 @@ module Reality
       rescue
         puts "Skipping whitespace cleanup: #{filename}"
       end
+      return '' if allow_empty && content.strip.length == 0
       content
     end
 
-    def clean_dos_whitespace(filename, content, eofnl)
+    def clean_dos_whitespace(filename, content, eofnl, allow_empty)
       begin
         content.gsub!(/\r\n/, "\n")
         content.gsub!(/[ \t]+\n/, "\n")
@@ -176,6 +178,7 @@ module Reality
       rescue
         puts "Skipping dos whitespace cleanup: #{filename}"
       end
+      return '' if allow_empty && content.strip.length == 0
       content
     end
 
@@ -206,8 +209,8 @@ module Reality
       # Bazel defaults
       attributes.text_rule('.bazelrc')
       attributes.text_rule('WORKSPACE')
-      attributes.text_rule('BUILD')
-      attributes.text_rule('BUILD.bazel')
+      attributes.text_rule('BUILD', :allow_empty => true)
+      attributes.text_rule('BUILD.bazel', :allow_empty => true)
       attributes.text_rule('*.bzl')
 
       # Ruby defaults
