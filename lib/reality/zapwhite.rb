@@ -22,7 +22,7 @@ module Reality
       @base_directory = base_directory
       @attributes = Reality::Git::Attributes.parse(@base_directory)
       # .ijwb is Bazel-IDEA directory while .idea is IDEAs normal directory structure.
-      @exclude_patterns = %w(vendor/.* node_modules/.* .ijwb/* .idea/*) + load_braid_mirrors
+      @exclude_patterns = %w(vendor/.* node_modules/.* .ijwb/.* .idea/.*) + load_braid_mirrors
       @check_only = false
       @additional_gitattribute_rules = []
     end

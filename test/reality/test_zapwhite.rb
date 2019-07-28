@@ -207,8 +207,8 @@ Additional .gitattribute rules:
 Exclude patterns:
  * vendor/.*
  * node_modules/.*
- * .ijwb/*
- * .idea/*
+ * .ijwb/.*
+ * .idea/.*
 Fixing: .gitattributes
 OUTPUT
     end
@@ -269,8 +269,8 @@ Additional .gitattribute rules:
 Exclude patterns:
  * vendor/.*
  * node_modules/.*
- * .ijwb/*
- * .idea/*
+ * .ijwb/.*
+ * .idea/.*
  * vendor/docs/way_of_stock
  * vendor/tools/buildr_plus
  * vendor/tools/dbt
