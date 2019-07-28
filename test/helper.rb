@@ -25,6 +25,8 @@ module Reality
 
     include Test::Unit::Assertions
 
+    @@fail_occurred = false
+
     def setup
       self.setup_working_dir
     end
@@ -43,8 +45,13 @@ module Reality
     def teardown_working_dir
       Dir.chdir(@cwd)
       if passed?
-        FileUtils.rm_rf self.working_dir if File.exist?(self.working_dir)
+        if @@fail_occurred
+          FileUtils.rm_rf self.working_dir if File.exist?(self.working_dir)
+        else
+          FileUtils.rm_rf self.workspace_dir if File.exist?(self.workspace_dir)
+        end
       else
+        @@fail_occurred = true
         $stderr.puts "Test #{self.class.name}.#{name} Failed. Leaving working directory #{self.working_dir}"
       end
     end
