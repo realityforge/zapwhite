@@ -2,7 +2,7 @@
 
 Gem::Specification.new do |s|
   s.name               = %q{zapwhite}
-  s.version            = '2.15.0'
+  s.version            = '2.16.0'
   s.platform           = Gem::Platform::RUBY
 
   s.authors            = ['Peter Donald']
