@@ -272,6 +272,7 @@ module Reality
       attributes.text_rule('*.sass')
       attributes.text_rule('*.scss')
       attributes.text_rule('*.less')
+      attributes.text_rule('*.gss')
       attributes.text_rule('*.sql')
       attributes.text_rule('*.java')
       attributes.text_rule('*.jsp')
