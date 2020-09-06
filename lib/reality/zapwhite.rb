@@ -251,6 +251,8 @@ module Reality
       attributes.text_rule('*.xsl')
       attributes.text_rule('*.wsdl')
       attributes.text_rule('*.toml')
+      attributes.text_rule('*.idl')
+      attributes.text_rule('*.webidl')
 
       # Build system defaults
       attributes.text_rule('buildfile')
