@@ -1,6 +1,6 @@
 # zapwhite
 
-[![Build Status](https://secure.travis-ci.org/realityforge/zapwhite.svg?branch=master)](http://travis-ci.org/realityforge/zapwhite)
+[![Build Status](https://api.travis-ci.com/realityforge/zapwhite.svg?branch=master)](http://travis-ci.com/realityforge/zapwhite)
 
 A simple tool to normalize whitespace in git repositories. The tool:
 
