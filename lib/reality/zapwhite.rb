@@ -295,6 +295,11 @@ module Reality
       attributes.text_rule('*.wat')
       attributes.binary_rule('*.wasm')
 
+      # WebGL Shader files
+      attributes.text_rule('*.frag')
+      attributes.text_rule('*.vert')
+      attributes.text_rule('*.shader')
+
       # Rust defaults
       attributes.text_rule('*.rs')
 
