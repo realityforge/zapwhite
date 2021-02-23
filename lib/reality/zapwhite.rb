@@ -123,7 +123,7 @@ module Reality
       end
       self.additional_gitattribute_rules.each do |line|
         rule = Reality::Git::AttributeRule.parse_line(line)
-        attributes.rule(rule.pattern, rule.attributes.merge(:priority => 2))
+        attributes.rule(rule.pattern, rule.attributes.merge(:priority => 2)) if rule
       end
       attributes
     end
