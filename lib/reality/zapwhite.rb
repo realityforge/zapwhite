@@ -211,7 +211,7 @@ module Reality
       attributes.text_rule('.bazelrc')
       attributes.text_rule('WORKSPACE')
       attributes.text_rule('BUILD', :allow_empty => true)
-      attributes.text_rule('BUILD.bazel', :allow_empty => true)
+      attributes.text_rule('*.bazel', :allow_empty => true)
       attributes.text_rule('*.bzl')
       attributes.text_rule('.bazelversion')
 
