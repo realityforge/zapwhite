@@ -10,6 +10,7 @@ require 'reality/zapwhite'
 @check_only = false
 @generate_gitattributes = true
 @exclude_patterns = []
+@omit_default_excludes = false
 @rules = []
 @base_directory = Dir.pwd
 OptionParser.new do |opts|
@@ -25,6 +26,10 @@ OptionParser.new do |opts|
 
   opts.on('-d', '--directory DIR', 'Base directory of git repository') do |base_directory|
     @base_directory = base_directory
+  end
+
+  opts.on('--omit-default-excludes', 'Do not add the default excludes.') do |pattern|
+    @omit_default_excludes = true
   end
 
   opts.on('-e', '--exclude-pattern PATTERN', 'Replace default exclude patterns with pattern(s) specified.') do |pattern|
@@ -49,8 +54,9 @@ runner = Reality::Zapwhite.new(File.expand_path(@base_directory))
 runner.check_only = @check_only
 runner.generate_gitattributes = @generate_gitattributes
 runner.additional_gitattribute_rules = @rules
+runner.exclude_patterns.clear if @omit_default_excludes
+
 unless @exclude_patterns.empty?
-  runner.exclude_patterns.clear
   @exclude_patterns.each do |exclude_pattern|
     runner.exclude_patterns << exclude_pattern
   end
@@ -66,6 +72,7 @@ if @verbose
       puts " * #{rule}"
     end
   end
+  puts "Omit default excludes?: #{@omit_default_excludes}"
   unless runner.exclude_patterns.empty?
     puts 'Exclude patterns:'
     runner.exclude_patterns.each do |pattern|

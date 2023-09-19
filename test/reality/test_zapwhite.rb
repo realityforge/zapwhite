@@ -204,6 +204,7 @@ Generate .gitattributes file?: true
 Additional .gitattribute rules:
  * *.bin -diff
  * *.rxt text
+Omit default excludes?: false
 Exclude patterns:
  * vendor/.*
  * node_modules/.*
@@ -266,6 +267,7 @@ Generate .gitattributes file?: true
 Additional .gitattribute rules:
  * *.bin -diff
  * *.rxt text
+Omit default excludes?: false
 Exclude patterns:
  * vendor/.*
  * node_modules/.*
